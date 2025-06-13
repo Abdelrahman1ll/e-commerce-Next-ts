@@ -7,7 +7,7 @@ type ProductTy = {
   _id: string;
   title: string;
   price: string;
-  image: string;
+  images: string;
   averageRating: number;
   quantity: number;
   description: string;
@@ -34,7 +34,7 @@ const Cart = ({ product }: { product: ProductTy }) => {
             </div>
           )}
           <Image
-            src={product?.image}
+            src={product?.images[0]}
             alt={product?.title}
             width={320}
             height={320}
@@ -65,7 +65,7 @@ const Cart = ({ product }: { product: ProductTy }) => {
         </div>
         <div className="mt-2 flex justify-between items-start flex-nowrap">
           <p className="text-lg font-light text-blue-600 shrink-0">
-          {(Number(product?.price || 0)).toLocaleString('en-US')} ج.م
+            {Number(product?.price || 0).toLocaleString("en-US")} ج.م
           </p>
 
           <div dir="rtl" className="flex flex-col flex-1">

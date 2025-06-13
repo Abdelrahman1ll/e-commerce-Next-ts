@@ -149,14 +149,14 @@ const UseAddProductComponents = () => {
         formData.append("quantity", quantity);
         formData.append("brand", Brand);
         formData.append("Category", category);
-        if (images.length > 0) {
-          try {
-            const mainImageBlob = base64ToBlob(images[0]);
-            await formData.append("image", mainImageBlob, "main-image.jpg");
-          } catch {
-            notify("حدث خطا ما", "error");
-          }
-        }
+        // if (images.length > 0) {
+        //   try {
+        //     const mainImageBlob = base64ToBlob(images[0]);
+        //     await formData.append("image", mainImageBlob, "main-image.jpg");
+        //   } catch {
+        //     notify("حدث خطا ما", "error");
+        //   }
+        // }
 
         // Add additional images
         for (let i = 0; i < images.length; i++) {

@@ -7,6 +7,19 @@ import Link from "next/link";
 
 // ... (بقية الأنواع تبقى كما هي بدون تغيير)
 
+// Define CartItemType if not imported from elsewhere
+type CartItemType = {
+  _id: string;
+  price: number;
+  count: number;
+  product: {
+    title: string;
+    images: string[];
+    averageRating: number;
+    quantity: number;
+  };
+};
+
 const CartComponents: FC = () => {
   const { products, isLoading, Data, handleRemove, handleRemoveAll } =
     UseCartComponents();
@@ -42,7 +55,7 @@ const CartComponents: FC = () => {
                       </div>
                     )}
                     <Image
-                      src={item?.product.image || "/placeholder.jpg"}
+                      src={item?.product.images[0]}
                       alt={item?.product?.title || "صورة المنتج"}
                       fill
                       sizes="(max-width: 768px) 100vw, 96px"

@@ -19,6 +19,14 @@ const OrderComponents = () => {
     price: number;
     quantity: number;
     image: string;
+    images: string[]; // Added images property
+    averageRating: number;
+    Category: string;
+    brand: string;
+    createdAt: string;
+    updatedAt: string;
+    __v: number; // Added __v property
+    // Add any other properties required by OrderOne's ProductType
   };
 
   type CartItemType = {
@@ -48,7 +56,7 @@ const OrderComponents = () => {
   };
   return (
     <>
-    <div>
+      <div>
         <h1 className="text-2xl text-center font-bold text-gray-800">
           الطلبات
         </h1>
@@ -93,39 +101,12 @@ const OrderComponents = () => {
                       return <OrderOne key={item?._id} product={item} />;
                     })}
                 </div>
-                {/* <div className="min-[664px]:flex  w-full">
-                  <div className="flex ml-5 mt-2">
-                    <p className="text-lg   text-gray-800">المجموع الكلي:</p>
-                    <div className="text-lg  text-blue-600">
-                      EGP-{item?.totalPrice}.00
-                    </div>
-                  </div>
 
-                  <div className="flex ml-5 mt-2">
-                    <p className="text-lg text-gray-800"> حالة التوصيل:</p>
-                    <div className={`text-lg 
-                      ${
-                        item?.isDelivered ? "text-green-600" : "text-red-600"
-                      }
-                    `}>
-                      {item?.isDelivered ? "تم التوصيل" : "لم يتم التوصيل "}
-                    </div>
-                  </div>
-                  <div className="flex mt-2 ml-4">
-                    <p className="text-lg text-gray-800"> حالة الدفع: </p>
-                    <div className={`text-lg 
-                      ${
-                        item?.isPaid ? "text-green-600" : "text-red-600"
-                      }
-                    `}>
-                      {item?.isPaid ? "تم الدفع" : "لم يتم الدفع"}
-                    </div>
-                  </div>
-                  
-                </div> */}
-<div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                    <span className="text-gray-700 font-medium">المجموع الكلي:</span>
+                    <span className="text-gray-700 font-medium">
+                      المجموع الكلي:
+                    </span>
                     <span className="text-blue-600 font-bold">
                       {item.totalPrice.toFixed(2)} ج.م
                     </span>
@@ -134,21 +115,29 @@ const OrderComponents = () => {
                   <div className="space-y-3">
                     {/* حالة التوصيل */}
                     <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                      <span className="text-gray-700 font-medium">حالة التوصيل:</span>
-                      <span className={`font-medium ${
-                        item.isDelivered ? 'text-green-600' : 'text-red-600'
-                      }`}>
-                        {item.isDelivered ? 'تم التوصيل' : 'قيد التوصيل'}
+                      <span className="text-gray-700 font-medium">
+                        حالة التوصيل:
+                      </span>
+                      <span
+                        className={`font-medium ${
+                          item.isDelivered ? "text-green-600" : "text-red-600"
+                        }`}
+                      >
+                        {item.isDelivered ? "تم التوصيل" : "قيد التوصيل"}
                       </span>
                     </div>
-                    
+
                     {/* حالة الدفع */}
                     <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                      <span className="text-gray-700 font-medium">حالة الدفع:</span>
-                      <span className={`font-medium ${
-                        item.isPaid ? 'text-green-600' : 'text-red-600'
-                      }`}>
-                        {item.isPaid ? 'تم الدفع' : 'معلق'}
+                      <span className="text-gray-700 font-medium">
+                        حالة الدفع:
+                      </span>
+                      <span
+                        className={`font-medium ${
+                          item.isPaid ? "text-green-600" : "text-red-600"
+                        }`}
+                      >
+                        {item.isPaid ? "تم الدفع" : "معلق"}
                       </span>
                     </div>
                   </div>

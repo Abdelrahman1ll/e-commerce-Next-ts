@@ -17,7 +17,6 @@ type ProductTy = {
   title: string;
   price: string;
   PriceBeforeDiscount?: string;
-  image: string;
   images?: string[];
   averageRating?: number;
   quantity: number;
@@ -346,7 +345,7 @@ const AddProducts = () => {
                       </div>
                     )}
                     <Image
-                      src={product?.image}
+                      src={product?.images && product.images.length > 0 ? product.images[0] : ""}
                       alt="productMainImage"
                       width={320}
                       height={320}

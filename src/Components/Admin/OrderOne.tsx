@@ -8,7 +8,7 @@ type ProductType = {
   description: string;
   price: number;
   quantity: number;
-  image: string;
+  images: string;
   averageRating: number;
   Category: {
     _id: string;
@@ -21,7 +21,6 @@ type ProductType = {
   createdAt: string;
   updatedAt: string;
   __v: number;
-
 };
 
 type Props = {
@@ -61,9 +60,9 @@ const OrderOne = (product: Props) => {
             <div className="w-8 h-8 border-3 border-blue-500 border-t-transparent rounded-full animate-spin" />
           </div>
         )}
-        
+
         <Image
-          src={products?.image ||''}
+          src={products?.images[0]}
           alt={products?.title || "صورة المنتج"}
           width={128}
           height={128}
@@ -77,7 +76,7 @@ const OrderOne = (product: Props) => {
         <h3 className="text-lg font-semibold text-gray-800">
           {products?.title || "اسم المنتج"}
         </h3>
-        
+
         <p className="text-sm text-gray-600 line-clamp-2">
           {products?.description || "لا يوجد وصف"}
         </p>
@@ -103,7 +102,6 @@ const OrderOne = (product: Props) => {
         {products?.Category && (
           <div className="text-sm text-gray-500">
             الفئة: {products?.Category?.name}
-            
           </div>
         )}
       </div>

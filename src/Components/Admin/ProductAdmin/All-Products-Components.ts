@@ -219,14 +219,12 @@ const UseAllProductsComponents = () => {
               const isExistingImage = img.startsWith("http");
               if (!isExistingImage) {
                 const imageBlob = await base64ToBlob(img);
-                formData.append(index === 0 ? "image" : "images", imageBlob);
-              } else if (index === 0) {
-                formData.append("images", img);
-              } else {
+                formData.append("images", imageBlob);
+              }else {
                 formData.append("images", img);
               }
             } catch (error) {
-              console.error(`Failed to process image :`, error);
+              console.error(`Failed to process image ${index}:`, error);
             }
           }
         }
