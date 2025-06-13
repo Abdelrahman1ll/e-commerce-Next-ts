@@ -51,6 +51,7 @@ const UseAllProductsComponents = () => {
   const [quantity, setQuantity] = useState("");
   const [brand, setBrand] = useState("");
   const [category, setCategory] = useState("");
+  const [dleteImg, setDleteImg] = useState<string[]>([]);
 
   const [images, setImages] = useState<string[]>([]);
   const [uploadKey, setUploadKey] = useState(0);
@@ -96,81 +97,46 @@ const UseAllProductsComponents = () => {
     }
   };
 
-  const handleFiles = useCallback((files: string[]) => {
+  const handleFiles = useCallback((files: string[], deleted: string[]) => {
     setImages(files);
+    setDleteImg(deleted);
   }, []);
-
-  // const base64ToBlob = async (imageData: string) => {
-  //   try {
-  //     // Check if it's a URL (not a base64 string)
-  //     if (imageData.startsWith("http") || imageData.startsWith("/")) {
-  //       // For URLs, fetch the image and convert to blob
-  //       const response = await fetch(imageData);
-  //       return await response.blob();
-  //     }
-
-  //     // Process base64 data
-  //     if (!imageData || !imageData.includes(",")) {
-  //       throw new Error("Invalid base64 format");
-  //     }
-
-  //     const parts = imageData.split(",");
-  //     const mimeMatch = parts[0].match(/:(.*?);/);
-
-  //     if (!mimeMatch) {
-  //       throw new Error("Invalid MIME type in base64 data");
-  //     }
-
-  //     const mime = mimeMatch[1];
-  //     const byteString = atob(parts[1]);
-  //     const arrayBuffer = new ArrayBuffer(byteString.length);
-  //     const uintArray = new Uint8Array(arrayBuffer);
-
-  //     for (let i = 0; i < byteString.length; i++) {
-  //       uintArray[i] = byteString.charCodeAt(i);
-  //     }
-
-  //     return new Blob([arrayBuffer], { type: mime });
-  //   } catch (error) {
-  //     throw error;
-  //   }
-  // };
 
   // دالة تحديث المنتج
   const base64ToBlob = async (imageData: string): Promise<Blob> => {
     try {
       // إذا كانت الصورة رابطًا مباشرًا
-      if (imageData.startsWith('http')) {
+      if (imageData.startsWith("http")) {
         const response = await fetch(imageData, {
-          mode: 'cors',
+          mode: "cors",
           headers: new Headers({
-            'Origin': window.location.origin
-          })
+            Origin: window.location.origin,
+          }),
         });
-        
-        if (!response.ok) throw new Error('Failed to fetch image');
+
+        if (!response.ok) throw new Error("Failed to fetch image");
         return await response.blob();
       }
-  
+
       // إذا كانت بيانات base64
-      const parts = imageData.split(',');
+      const parts = imageData.split(",");
       const mimeMatch = parts[0].match(/:(.*?);/);
-      const mime = mimeMatch?.[1] || 'image/jpeg';
+      const mime = mimeMatch?.[1] || "image/jpeg";
       const byteString = atob(parts[1]);
       const buffer = new ArrayBuffer(byteString.length);
       const uintArray = new Uint8Array(buffer);
-  
+
       for (let i = 0; i < byteString.length; i++) {
         uintArray[i] = byteString.charCodeAt(i);
       }
-  
+
       return new Blob([buffer], { type: mime });
     } catch (error) {
-      console.error('Image processing error:', error);
-      throw new Error('فشل في معالجة الصورة');
+      console.error("Image processing error:", error);
+      throw new Error("فشل في معالجة الصورة");
     }
   };
- 
+
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
     let valid = true;
@@ -237,42 +203,30 @@ const UseAllProductsComponents = () => {
         formData.append("quantity", quantity);
         formData.append("brand", brand);
         formData.append("Category", category);
-
+        // إضافة الصور المحذوفة
+        if (dleteImg && dleteImg.length > 0) {
+          dleteImg.forEach((img) => {
+            formData.append("dleteImg", img);
+          });
+        }
         if (priceBeforeDiscount) {
           formData.append("PriceBeforeDiscount", priceBeforeDiscount);
         }
 
-        // if (images.length > 0) {
-        //   try {
-        //     const mainImageBlob = await base64ToBlob(images[0]);
-        //     await formData.append("image", mainImageBlob, "main-image.jpg");
-        //   } catch {}
-        // }
-
-        // // Process all additional images
-        // for (let i = 0; i < images.length; i++) {
-        //   try {
-        //     const imageBlob = await base64ToBlob(images[i]);
-        //     await formData.append("images", imageBlob, `image-${i + 1}.jpg`);
-        //   } catch {
-        //     notify("حدث خطا ما", "error");
-        //   }
-        // }
-
-        if (images.length > 0) {
+        if (images && images.length > 0) {
           for (const [index, img] of images.entries()) {
             try {
-              const isExistingImage = img.startsWith('http');
+              const isExistingImage = img.startsWith("http");
               if (!isExistingImage) {
                 const imageBlob = await base64ToBlob(img);
-                formData.append(index === 0 ? 'image' : 'images', imageBlob);
+                formData.append(index === 0 ? "image" : "images", imageBlob);
               } else if (index === 0) {
-                formData.append('image', img);
+                formData.append("images", img);
               } else {
-                formData.append('images', img);
+                formData.append("images", img);
               }
             } catch (error) {
-              console.error(`Failed to process image ${index}:`, error);
+              console.error(`Failed to process image :`, error);
             }
           }
         }
@@ -281,13 +235,14 @@ const UseAllProductsComponents = () => {
           id: selectedProductId,
           data: formData,
         }).unwrap();
+
         setUploadKey((prev) => prev + 1);
         setEditOpen(false);
         refetch();
         resetForm();
-      } catch  {
+        notify("تم تحديث المنتج بنجاح", "success");
+      } catch {
         notify("حدث خطا ما", "error");
-        
       }
     }
   };
@@ -302,6 +257,7 @@ const UseAllProductsComponents = () => {
     setBrand("");
     setCategory("");
     setImages([]);
+    setDleteImg([]);
 
     setErrors({
       title: "",

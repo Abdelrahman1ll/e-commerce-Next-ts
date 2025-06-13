@@ -3,123 +3,116 @@ import { useRef, useState, FC, useEffect } from "react";
 import { PhotoIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 interface AddProductUploadProps {
-  initialImages?: string[]; // مصفوفة الصور الابتدائية (من المفترض أن تحتوي على 4 صور) سواء كانت Base64 أو روابط URL
-  onFilesChange: (files: string[]) => void; // دالة لإرجاع الصور الحالية للوالد
+  initialImages?: (string | null)[];
+  onFilesChange: (files: string[], deleted: string[]) => void;
 }
 
 const AddProductUploadEdit: FC<AddProductUploadProps> = ({
   initialImages = [],
   onFilesChange,
 }) => {
-  // تهيئة الحالة بحيث تكون مصفوفات previews وfiles بطول 4
-  // (تأخذ الصور الابتدائية إن وُجِدت وتُملأ الفراغات بـ null)
-  const [previews, setPreviews] = useState<(string | null)[]>(() => {
-    const arr = [...initialImages];
-    while (arr.length < 4) arr.push(null);
-    return arr.slice(0, 4);
-  });
-  const [imgLoading, setImgLoading] = useState(true); // حالة تحميل الصورة
-  const [files, setFiles] = useState<(string | null)[]>(() => {
-    const arr = [...initialImages];
-    while (arr.length < 4) arr.push(null);
-    return arr.slice(0, 4);
-  });
-
+  const [previews, setPreviews] = useState<(string | null)[]>(initialImages);
+  const [files, setFiles] = useState<(string | null)[]>([]);
+  const [deletedImages, setDeletedImages] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  // targetIndex يحدد أي صورة سيتم تحديثها عند اختيار ملف واحد
-  // إذا كانت القيمة null يتم التعامل معها على أنها تحميل جماعي
   const [targetIndex, setTargetIndex] = useState<number | null>(null);
+  const initialRef = useRef<(string | null)[]>([]);
 
-  // دالة لمعالجة التحميل الجماعي للصور في الخانات الفارغة
+  useEffect(() => {
+    if (initialRef.current.length === 0) {
+      const filledInitials = [...initialImages];
+      while (filledInitials.length < 4) {
+        filledInitials.push(null);
+      }
+
+      setPreviews(filledInitials);
+      setFiles(filledInitials);
+      initialRef.current = initialImages;
+    }
+  }, [initialImages]);
+
   const handleBulkUpload = async (newFiles: File[]) => {
-    // إيجاد مواقع الخانات الفارغة
-    const availableSlots = files.reduce((acc, file, idx) => {
-      if (file === null) acc.push(idx);
-      return acc;
-    }, [] as number[]);
-    // اختيار عدد الملفات بما يتناسب مع عدد الخانات المتاحة
-    const filesToAdd = newFiles.slice(0, availableSlots.length);
+    const availableSlots = files.filter((f) => f === null).length;
+    const filesToAdd = newFiles.slice(0, availableSlots);
 
     const newPreviews = await Promise.all(
       filesToAdd.map(
         (file) =>
-          new Promise<string>((resolve, reject) => {
+          new Promise<string>((resolve) => {
             const reader = new FileReader();
             reader.onload = () => resolve(reader.result as string);
-            reader.onerror = reject;
             reader.readAsDataURL(file);
           })
       )
     );
 
-    // تحديث حالة المعاينات
     setPreviews((prev) => {
       const updated = [...prev];
-      newPreviews.forEach((preview, i) => {
-        const slotIndex = availableSlots[i];
-        updated[slotIndex] = preview;
-      });
-      return updated;
+      let previewIndex = 0;
+      return updated.map((p) =>
+        p === null && previewIndex < newPreviews.length
+          ? newPreviews[previewIndex++]
+          : p
+      );
     });
 
-    // تحديث حالة الملفات بحيث تتزامن مع المعاينات
     setFiles((prev) => {
       const updated = [...prev];
-      newPreviews.forEach((preview, i) => {
-        const slotIndex = availableSlots[i];
-        updated[slotIndex] = preview;
-      });
-      return updated;
+      let fileIndex = 0;
+      return updated.map((f) =>
+        f === null && fileIndex < newPreviews.length
+          ? newPreviews[fileIndex++]
+          : f
+      );
     });
   };
 
-  // دالة لمعالجة تحميل صورة واحدة وتحديث الصورة في الموقع المحدد
   const handleSingleUpload = async (file: File, index: number) => {
     const reader = new FileReader();
     reader.onload = () => {
       const result = reader.result as string;
-      // نقبل الصورة لو كانت Base64 أو أي بيانات (الصورة الجديدة عادةً هتكون Base64)
-      if (result.startsWith("data:image")) {
-        // تحديث كل من حالة المعاينة والملف
-        setPreviews((prev) => {
-          const updated = [...prev];
-          updated[index] = result;
-          return updated;
-        });
-        setFiles((prev) => {
-          const updated = [...prev];
-          updated[index] = result;
-          return updated;
-        });
-      } else {
-        console.error("Invalid image format");
-      }
+
+      setPreviews((prev) => {
+        const newPreviews = [...prev];
+        newPreviews[index] = result;
+        return newPreviews;
+      });
+
+      setFiles((prev) => {
+        const newFiles = [...prev];
+        newFiles[index] = result;
+        return newFiles;
+      });
     };
     reader.readAsDataURL(file);
   };
 
-  // معالجة تغيير ملف الإدخال
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
     const selectedFiles = Array.from(e.target.files);
 
-    // إذا كان targetIndex null يتم التعامل معها كتحميل جماعي
-    // وإلا يتم تحديث الصورة في الموضع المحدد
     if (targetIndex === null) {
       handleBulkUpload(selectedFiles);
     } else {
       handleSingleUpload(selectedFiles[0], targetIndex);
     }
+
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
-  // دالة لحذف صورة من المكان المحدد
   const handleDelete = (index: number) => {
+    const removed = files[index];
+
+    if (removed && initialRef.current.includes(removed)) {
+      setDeletedImages((prev) => [...prev, removed]);
+    }
+
     setPreviews((prev) => {
       const updated = [...prev];
       updated[index] = null;
       return updated;
     });
+
     setFiles((prev) => {
       const updated = [...prev];
       updated[index] = null;
@@ -127,30 +120,17 @@ const AddProductUploadEdit: FC<AddProductUploadProps> = ({
     });
   };
 
-  // دالة ترجع الصور الصالحة (غير null)
-  const getValidImages = (): string[] => {
-    return files.filter((file): file is string => Boolean(file));
-  };
-
-  // إرسال الصور (سواء تم تعديلها أم لا) إلى المكوّن الأب
   useEffect(() => {
-    onFilesChange(getValidImages());
-  }, [files, onFilesChange]);
-
-  // في حال كنت بحاجة لتعريض الدالة للوالد عبر نافذة المتصفح
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      (window as any).productImageUpload = {
-        getImages: getValidImages,
-      };
-    }
-  }, [files]);
+    const validFiles = files.filter(Boolean) as string[];
+    onFilesChange(validFiles, deletedImages);
+  }, [files, deletedImages, onFilesChange]);
 
   return (
     <div className="max-w-2xl mx-auto">
       <label className="block mb-2 text-sm font-medium text-gray-700">
         صور المنتج (الحد الأقصى 4 صور)
       </label>
+
       <div className="mt-1 border-2 border-dashed rounded-lg p-2 border-gray-300">
         <div className="grid grid-cols-2 gap-4">
           {previews.map((preview, index) => (
@@ -168,25 +148,12 @@ const AddProductUploadEdit: FC<AddProductUploadProps> = ({
             >
               {preview ? (
                 <>
-                {imgLoading && (
-                <div className="absolute inset-0 flex items-center justify-center bg-white">
-                  <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-                </div>
-              )}
                   <Image
-                    // إضافة crossOrigin لمصادر الصور الخارجية من API
-                    crossOrigin="anonymous"
                     src={preview}
                     alt={`Preview ${index + 1}`}
+                    className="w-full h-full object-cover rounded-lg"
                     width={128}
                     height={128}
-                    className="w-full h-full object-cover rounded-lg"
-                    onError={(e) => {
-                      console.error("فشل تحميل الصورة:", preview);
-                      // يمكنك حذف الصورة أو استبدالها بصورة بديلة هنا لو حابب
-                    }}
-                    onLoadingComplete={() => setImgLoading(false)}
-
                   />
                   <button
                     type="button"
@@ -200,14 +167,15 @@ const AddProductUploadEdit: FC<AddProductUploadProps> = ({
                   </button>
                 </>
               ) : (
-                <div className="flex flex-col items-center text-gray-400">
+                <div className="flex flex-col items-center justify-center text-gray-600">
                   <PhotoIcon className="w-8 h-8 mb-2" />
-                  <span className="text-xs max-[950px]:mr-4">اضغط للإضافة</span>
+                  <span className="text-xs">اضغط للإضافة</span>
                 </div>
               )}
             </div>
           ))}
         </div>
+
         <div className="mt-4 text-center">
           <button
             type="button"
@@ -221,6 +189,7 @@ const AddProductUploadEdit: FC<AddProductUploadProps> = ({
           </button>
         </div>
       </div>
+
       <input
         type="file"
         ref={fileInputRef}
