@@ -129,8 +129,8 @@ const ProductOverviewComponents: FC<Props> = (id) => {
                 </div>
               )}
               <Image
-                src={selectedImage || product?.image}
-                alt="صورة المنتج"
+                src={selectedImage || product?.images?.[0] || "https://placehold.co/600x600?text=HeaterPro"}
+                alt={product?.title || "صورة المنتج"}
                 fill
                 className="object-contain rounded"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

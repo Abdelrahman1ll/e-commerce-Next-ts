@@ -148,8 +148,8 @@ const MaintenanceRequestsComponents = () => {
                         </div>
                       )}
                         <Image
-                          src={maint?.image || ""}
-                          alt="حقيبة ظهر صغيرة"
+                          src={maint?.image || "https://placehold.co/280x280?text=No+Image"}
+                          alt={maint?.title || "صورة الصيانة"}
                           className="w-50 h-50 ml-3 mt-2 object-cover rounded-md mb-2"
                           width={280}
                           height={280}

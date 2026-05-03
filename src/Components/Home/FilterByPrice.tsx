@@ -12,12 +12,14 @@ const FilterByPrice: FC<FilterByPriceProps> = ({ toggleMenu, oPen }) => {
     localStorage.setItem("sort", key);
   };
 
-  if (localStorage.getItem("sort") === "السعر من الاقل الى الاعلى") {
-    i = "السعر من الاقل الى الاعلى";
-  } else if (localStorage.getItem("sort") === "السعر من الاعلى الى الاقل") {
-    i = "السعر من الاعلى الى الاقل";
-  } else {
-    i = "";
+  if (typeof window !== "undefined") {
+    if (localStorage.getItem("sort") === "السعر من الاقل الى الاعلى") {
+      i = "السعر من الاقل الى الاعلى";
+    } else if (localStorage.getItem("sort") === "السعر من الاعلى الى الاقل") {
+      i = "السعر من الاعلى الى الاقل";
+    } else {
+      i = "";
+    }
   }
   return (
     <div className="relative inline-block text-left">

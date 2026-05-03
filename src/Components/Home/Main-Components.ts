@@ -7,6 +7,9 @@ const UseMainComponents = () => {
   const [isoPen, setIsoPen] = useState(false);
   
   const priceQuery = () => {
+    if (typeof window === "undefined") {
+      return "/api/Product";
+    }
     const storedMin = Number(localStorage.getItem("min")) || 0;
     const storedMax = Number(localStorage.getItem("max")) || 0;
     const storedSort = localStorage.getItem("sort") || "";

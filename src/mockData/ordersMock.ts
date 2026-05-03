@@ -1,0 +1,118 @@
+export const ordersMock = {
+  results: 3,
+  paginationResult: {
+    currentPage: 1,
+    limit: 10,
+    numberOfPages: 1,
+  },
+  data: [
+    {
+      _id: "order1",
+      orderNumber: 1001,
+      user: {
+        _id: "user1",
+        name: "Ahmed Ali",
+        email: "ahmed@example.com",
+        number: "01000000001",
+      },
+      shippingAddress: {
+        alias: "المنزل",
+        city: "القاهرة",
+        details: "مدينة نصر، شارع مكرم عبيد",
+        phone: "01000000001",
+        postalCode: "11765",
+        _id: "addr1",
+      },
+      cartItems: [
+        {
+          product: {
+            _id: "641351649",
+            title: "سخان مياه كهربائي تورنيدو 50 لتر",
+            images: ["https://m.media-amazon.com/images/I/51B00AJdN4L._AC_SX466_.jpg"],
+            price: 3500,
+          },
+          count: 1,
+          price: 3500,
+        },
+      ],
+      totalPrice: 3500,
+      paymentMethodType: "cash",
+      isPaid: false,
+      isDelivered: false,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    },
+    {
+      _id: "order2",
+      orderNumber: 1002,
+      user: {
+        _id: "user2",
+        name: "Mona Salem",
+        email: "mona@example.com",
+        number: "01200000002",
+      },
+      shippingAddress: {
+        alias: "العمل",
+        city: "الإسكندرية",
+        details: "سموحة، شارع فوزي معاذ",
+        phone: "01200000002",
+        postalCode: "21615",
+        _id: "addr2",
+      },
+      cartItems: [
+        {
+          product: {
+            _id: "641351650",
+            title: "سخان مياه غاز أوليمبيك 10 لتر",
+            images: ["https://m.media-amazon.com/images/I/51GPNcxvXSL._AC_SY450_.jpg"],
+            price: 4200,
+          },
+          count: 2,
+          price: 4200,
+        },
+      ],
+      totalPrice: 8400,
+      paymentMethodType: "card",
+      isPaid: true,
+      isDelivered: true,
+      createdAt: new Date(Date.now() - 86400000).toISOString(),
+      updatedAt: new Date(Date.now() - 40000000).toISOString(),
+    },
+    {
+      _id: "order3",
+      orderNumber: 1003,
+      user: {
+        _id: "user3",
+        name: "Khaled Hassan",
+        email: "khaled@example.com",
+        number: "01100000003",
+      },
+      shippingAddress: {
+        alias: "المنزل 2",
+        city: "الجيزة",
+        details: "الدقي، شارع التحرير",
+        phone: "01100000003",
+        postalCode: "12611",
+        _id: "addr3",
+      },
+      cartItems: [
+        {
+          product: {
+            _id: "641351651",
+            title: "سخان مياه كهربائي فريش 30 لتر",
+            images: ["https://m.media-amazon.com/images/I/51B00AJdN4L._AC_SX466_.jpg"],
+            price: 2800,
+          },
+          count: 1,
+          price: 2800,
+        },
+      ],
+      totalPrice: 2800,
+      paymentMethodType: "cash",
+      isPaid: false,
+      isDelivered: true,
+      createdAt: new Date(Date.now() - 172800000).toISOString(),
+      updatedAt: new Date(Date.now() - 86400000).toISOString(),
+    },
+  ],
+};

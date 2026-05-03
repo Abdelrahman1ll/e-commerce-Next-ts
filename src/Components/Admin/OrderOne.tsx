@@ -62,7 +62,7 @@ const OrderOne = (product: Props) => {
         )}
 
         <Image
-          src={products?.images[0]}
+          src={products?.images?.[0] || "https://placehold.co/128x128?text=Product"}
           alt={products?.title || "صورة المنتج"}
           width={128}
           height={128}

@@ -7,8 +7,11 @@ import { Provider } from "react-redux";
 import {  ToastContainer} from 'react-toastify';
 import NetworkStatus from "@/Components/NetworkStatus";
 import { SessionProvider } from "next-auth/react";
-import { SpeedInsights } from "@vercel/speed-insights/next"
-
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { useEffect } from "react";
+import Cookies from "js-cookie";
+import { adminMock } from "../mockData/userMock";
+import { getMockData } from "../mockData/index";
 const tajawal = Tajawal({
   subsets: ["arabic", "latin"],
   variable: "--font-tajawal",
@@ -31,6 +34,68 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  useEffect(() => {
+    /* 
+    ================================================================================
+    [ARABIC]
+    السبب من إضافة هذا الكود هو تلبية متطلبين أساسيين:
+    1- اعتراض جميع طلبات الـ API الصادرة من التطبيق للتأكد من أن طرق GET فقط هي المسموحة
+       (إلا في حالة تسجيل الدخول). يتم منع طرق الحذف (DELETE) والتعديل (PUT) والإضافة (POST).
+    2- في حالة وجود خطأ أو عطل في الباك إند (Backend)، سيقوم الكود بإرجاع البيانات من ملف 
+       الموك داتا (mockData) تلقائياً، دون الحاجة للتعديل على أي من ملفات Redux API.
+       يضمن هذا أن التطبيق يستمر بالعمل ويتم تمرير البيانات بالشكل الذي يتوقعه الـ API تماماً.
+    أيضاً، يتم تسجيل الدخول بصلاحية الـ Admin تلقائياً عند فتح الموقع لأول مرة.
+    
+    [ENGLISH]
+    The reason for adding this code is to fulfill two main requirements:
+    1- Intercept all outgoing API requests to ensure ONLY GET methods are allowed 
+       (except for login). DELETE, PUT, and POST methods are blocked.
+    2- If the backend is down or returns an error, the code will automatically fallback 
+       and return data from the mockData file, without modifying any Redux API code.
+       This ensures the app keeps working and data is sent exactly as the API expects.
+    Also, it automatically logs in the Admin on first load.
+    ================================================================================
+    */
+    
+    if (!Cookies.get("authToken") && !Cookies.get("userData")) {
+      Cookies.set("authToken", adminMock.token, { expires: 7 });
+      Cookies.set("userData", JSON.stringify(adminMock.data), { expires: 7 });
+      Cookies.set("role", adminMock.data.role, { expires: 7 });
+      Cookies.set("name", adminMock.data.name, { expires: 7 });
+    }
+
+    // Intercepting fetch
+    const originalFetch = window.fetch;
+    window.fetch = async (...args) => {
+      const [resource, config] = args;
+      const url = typeof resource === "string" ? resource : (resource instanceof Request ? resource.url : "");
+      const method = config?.method || (resource instanceof Request ? resource.method : "GET");
+
+      if (method.toUpperCase() !== "GET" && !url.includes("login")) {
+        console.warn(`[Mock System] Blocked ${method} request to ${url}. Only GET is allowed.`);
+        return new Response(JSON.stringify(getMockData(url)), {
+          status: 200,
+          headers: { "Content-Type": "application/json" }
+        });
+      }
+
+      try {
+        const response = await originalFetch(...args);
+        // Fallback to mock data if backend fails (500, 404, network error, etc)
+        if (!response.ok && response.status !== 401 && response.status !== 400 && response.status !== 422) {
+          throw new Error("Backend not working");
+        }
+        return response;
+      } catch (error) {
+        console.warn(`[Mock System] Backend failed for ${url}, fetching from mock data...`);
+        return new Response(JSON.stringify(getMockData(url)), {
+          status: 200,
+          headers: { "Content-Type": "application/json" }
+        });
+      }
+    };
+  }, []);
+
   return (
     <html lang="en">
         

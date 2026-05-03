@@ -34,8 +34,8 @@ const Cart = ({ product }: { product: ProductTy }) => {
             </div>
           )}
           <Image
-            src={product?.images[0]}
-            alt={product?.title}
+            src={product?.images?.[0] || "https://placehold.co/320x320?text=Product"}
+            alt={product?.title || "صورة المنتج"}
             width={320}
             height={320}
             priority // تعيين خاصية  priority لتحميل الصورة بشكل أسرع
