@@ -3,7 +3,6 @@
 //   output: 'export',
 //   images: {
 module.exports = {
-  // output: 'export',
   images: {
     unoptimized: true,
     remotePatterns: [
