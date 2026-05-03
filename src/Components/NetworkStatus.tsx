@@ -9,7 +9,7 @@ export default function NetworkStatus() {
   // ref لتخزين ما إذا كان أول تحميل
   const firstMount = useRef(true);
   // ref لتخزين الحالة السابقة
-  const prevOnline = useRef<boolean>(navigator.onLine);
+  const prevOnline = useRef<boolean>(true);
 
   useEffect(() => {
     const updateStatus = () => {
