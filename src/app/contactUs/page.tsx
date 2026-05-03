@@ -9,7 +9,7 @@ const ContactUs = () => {
       <div className="mt-20">
         <BackButton />
       </div>
-      <HeaderComponents user={""} setUser={""} />
+      <HeaderComponents />
       <ContactUsComponents />
       <div className="mt-50">
       <FooterComponents />

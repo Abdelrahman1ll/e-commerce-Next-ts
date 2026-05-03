@@ -12,7 +12,7 @@ const Brand = () => {
         <div className="pt-20 ">
           <BackButton />
         </div>
-        <HeaderComponents user={""} setUser={""} />
+        <HeaderComponents />
 
         <div className="hidden min-[950px]:block ">
           <div className="flex justify-between ">

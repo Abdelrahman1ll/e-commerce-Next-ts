@@ -116,12 +116,12 @@ const UseProfileComponents = () => {
         }
       } catch (error) {
         notify("حدث خطا ما", "error");
-         if (error.data?.message?.includes("Plan executor error during findAndModify :: caused by :: E11000 duplicate key error collection: test.users index: number_1 dup key: { number: \"01065217000\" }")) {
-      setErrors({ ...errors, number: "رقم الهاتف  غير صالح" });
-    } else {
-      // Handle other errors
-      setErrors({ ...errors, number: "حدث خطأ أثناء التحديث" });
-    }
+        if (isApiError(error) && error.data?.message?.includes("Plan executor error during findAndModify :: caused by :: E11000 duplicate key error collection: test.users index: number_1 dup key: { number: \"01065217000\" }")) {
+          setErrors({ ...errors, number: "رقم الهاتف  غير صالح" });
+        } else {
+          // Handle other errors
+          setErrors({ ...errors, number: "حدث خطأ أثناء التحديث" });
+        }
       }
     }
   };
@@ -209,7 +209,7 @@ const UseProfileComponents = () => {
       }
     } catch (error) {
       notify("حدث خطا ما", "error");
-      if (error.data?.message === "Plan executor error during findAndModify :: caused by :: E11000 duplicate key error collection: test.users index: number_1 dup key: { number: \"01065217980\" }") {
+      if (isApiError(error) && error.data?.message === "Plan executor error during findAndModify :: caused by :: E11000 duplicate key error collection: test.users index: number_1 dup key: { number: \"01065217980\" }") {
         setErrors({ ...errors, Tonumber: "رقم الهاتف  غير صالح" });
       } else {
         // Handle other errors

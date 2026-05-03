@@ -7,7 +7,7 @@ type ProductTy = {
   _id: string;
   title: string;
   price: string;
-  images: string;
+  images: string[];
   averageRating: number;
   quantity: number;
   description: string;

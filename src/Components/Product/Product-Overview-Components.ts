@@ -70,16 +70,16 @@ const UseProductOverviewComponents = ({ id }: Props) => {
       }
       await postCart({ productId: id, quantity: quantity }).unwrap();
       refetchCart();
-    } catch (error) {
-      
+    } catch (error: unknown) {
+      const apiError = error as { data?: { message?: string } };
       if (
-        error.data?.message ===
+        apiError.data?.message ===
         "You do not have permission to access this path."
       ) {
         notify("غير مسموح للادمن باضافه منتج في السله", "error");
-      }else if (
-        error.data?.message ==="You are not logged in. Please log in to access this page."
-      ){
+      } else if (
+        apiError.data?.message === "You are not logged in. Please log in to access this page."
+      ) {
         notify("يرجى تسجيل الدخول", "error");
       }
     }

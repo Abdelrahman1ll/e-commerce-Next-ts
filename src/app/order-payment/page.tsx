@@ -9,7 +9,7 @@ const OrderPaymentPage = () => {
       <div className="pt-20">
         <BackButton />
       </div>
-      <HeaderComponents user={""} setUser={""} />
+      <HeaderComponents />
 
         <OrderPayment/>
         <div className="mt-80">

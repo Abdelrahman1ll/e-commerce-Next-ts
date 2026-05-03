@@ -18,7 +18,7 @@ const MaintenanceRequestsComponents = () => {
   const [imgLoading, setImgLoading] = useState(true);
   useEffect(() => {
     refetch();
-  }, []);
+  }, [refetch]);
 
   
   
@@ -81,7 +81,7 @@ const MaintenanceRequestsComponents = () => {
                       )}
                       
                       <Image
-                        src={item?.image || ""}
+                        src={item?.image || "https://placehold.co/110x110?text=No+Image"}
                         alt={item?.title || ""}
                         width={110}
                         height={110}

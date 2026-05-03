@@ -53,9 +53,9 @@ const ReviewCard: FC<ReviewCardProps> = ({
     try {
       await deleteReview(reviewId).unwrap();
       window.location.reload();
-    } catch (error) {
-      console.log(error);
-      if (error.data?.message === "غير مصرح لك بحذف هذه المراجعة") {
+    } catch (error: unknown) {
+      const apiError = error as { data?: { message?: string } };
+      if (apiError.data?.message === "غير مصرح لك بحذف هذه المراجعة") {
         notify("غير مصرح لك بحذف هذه التقييم", "error");
       }
     }
@@ -100,9 +100,10 @@ const ReviewCard: FC<ReviewCardProps> = ({
 
         setOpen(false);
         window.location.reload();
-      } catch (error) {
-        console.log(error);
-        if (error.data?.message === "غير مصرح لك بتعديل هذه التقييم") {
+      } catch (error: unknown) {
+        const apiError = error as { data?: { message?: string } };
+        console.log(apiError);
+        if (apiError.data?.message === "غير مصرح لك بتعديل هذه التقييم") {
           notify("غير مصرح لك بتعديل هذه التقييم", "warn");
         } else {
           notify("فشل في التعديل", "error");
@@ -147,7 +148,6 @@ const ReviewCard: FC<ReviewCardProps> = ({
                       starSpacing="2px"
                       changeRating={setRating}
                       name="rating"
-                      direction="rtl"
                     />
                     {errors?.rating && (
                       <div className="mb-2 text-sm text-red-500">

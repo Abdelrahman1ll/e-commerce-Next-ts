@@ -12,7 +12,7 @@ import {
 import Link from "next/link";
 import UseCartComponents from "../Cart/Cart-Components";
 import Cookies from "js-cookie";
-const HeaderComponents: React.FC<{ user: string; setUser: string }> = () => {
+const HeaderComponents: React.FC = () => {
   const { Amount } = UseCartComponents();
 
   const [user, setUser] = useState<{

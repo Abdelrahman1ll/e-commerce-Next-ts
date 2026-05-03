@@ -1,6 +1,7 @@
 "use client";
 import { useRef, useState, FC, useEffect } from "react";
 import { PhotoIcon, XMarkIcon } from "@heroicons/react/24/solid";
+import Image from "next/image";
 
 interface AddProductUploadProps {
   onFilesChange: (files: string[]) => void;
@@ -135,10 +136,13 @@ const AddProductUpload: FC<AddProductUploadProps> = ({ onFilesChange }) => {
               {preview ? (
                 <>
                   {/* Use img instead of Next.js Image for base64 */}
-                  <img
+                  <Image
                     src={preview}
                     alt={`Preview ${index + 1}`}
+                    width={500}
+                    height={500}
                     className="w-full h-full object-cover rounded-lg"
+                    unoptimized
                   />
                   <button
                     type="button"

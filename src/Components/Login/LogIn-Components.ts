@@ -73,14 +73,14 @@ const UseLogInComponents = () => {
           email: "",
           password: "",
         }));
-        if(error.data?.message === "البريد الإلكتروني أو كلمة المرور غير صحيحة"){
-          setErrors((prev) => ({
-            ...prev,
-            email: "بريد الالكتروني او رمز التحقق غير صحيح",
-            password: "بريد الالكتروني او رمز التحقق غير صحيح",
-          }));
-        }
         if (isApiError(error)) {
+          if (error.data?.message === "البريد الإلكتروني أو كلمة المرور غير صحيحة") {
+            setErrors((prev) => ({
+              ...prev,
+              email: "بريد الالكتروني او رمز التحقق غير صحيح",
+              password: "بريد الالكتروني او رمز التحقق غير صحيح",
+            }));
+          }
           if (
             error.data?.message?.includes("The email or password is incorrect.")
           ) {

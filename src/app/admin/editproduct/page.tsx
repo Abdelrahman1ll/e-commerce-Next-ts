@@ -10,7 +10,7 @@ const AddProductPage = () => {
       <div className="pt-20 mb-2 ">
         <BackButton />
       </div>
-      <HeaderComponents user={""} setUser={""} />
+      <HeaderComponents />
 
       <div className="hidden min-[950px]:block">
         <div className="flex justify-between">

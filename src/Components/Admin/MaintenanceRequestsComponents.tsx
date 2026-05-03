@@ -24,8 +24,8 @@ const MaintenanceRequestsComponents = () => {
   const { data,refetch,isLoading } = useGetAllMaintenanceQuery({});
   const maintenanceRequests = data?.data;
   useEffect(() => {
-      refetch();
-    }, []);
+    refetch();
+  }, [refetch]);
   const [imgLoading, setImgLoading] = useState(true);
   return (
     <>

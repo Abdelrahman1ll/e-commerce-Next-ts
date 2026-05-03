@@ -8,15 +8,34 @@ import OrderOne from "./OrderOne";
 import { useEffect } from "react";
 import notify from "../notify";
 
+type CartItemType = {
+  _id: string;
+  product: {
+    _id: string;
+    title: string;
+    description: string;
+    price: number;
+    quantity: number;
+    images: string[];
+    averageRating: number;
+    Category: string;
+    brand: string;
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
+  };
+  count: number;
+};
+
 type OrderType = {
   _id: string;
   createdAt: string;
   status: string;
   paymentMethodType: string;
   paymentMethod: string;
-  products: ProductType[];
+  products: unknown[];
   orderNumber: number;
-  cartItems: string[];
+  cartItems: CartItemType[];
   isDelivered: boolean;
   deliveredAt: string;
   isPaid: boolean;
@@ -37,20 +56,11 @@ type OrderType = {
   };
 };
 
-type ProductType = {
-  _id: string;
-  title: string;
-  description: string;
-  price: string;
-  quantity: number;
-  image: string;
-};
-
 const OrderDetailsComponents = () => {
   const { data, isLoading, refetch } = useGetAllOrderQuery({});
   const orderDetails = data?.data;
   
-  useEffect(() => { refetch() }, []);
+  useEffect(() => { refetch() }, [refetch]);
 
   const [putPay, { isLoading: isUpdating }] = usePutPayMutation();
   const [putDeliver, { isLoading: isUpdatingDeliver }] = usePutDeliverMutation();

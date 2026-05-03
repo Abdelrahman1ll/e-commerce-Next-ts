@@ -10,7 +10,7 @@ const OrderComponents = () => {
 
   useEffect(() => {
     refetch();
-  }, []);
+  }, [refetch]);
 
   type ProductType = {
     _id: string;

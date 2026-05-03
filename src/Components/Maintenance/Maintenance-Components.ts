@@ -1,5 +1,5 @@
 "use client";
-import {  useState, useEffect } from "react";
+import {  useState, useEffect, useMemo } from "react";
 import { usePostMaintenanceMutation } from "@/redux/Orders/ApiMaintenance";
 import notify from "../notify";
 import { useRouter } from "next/navigation";
@@ -12,7 +12,7 @@ interface Address {
 const UseMaintenanceComponents = () => {
  const router = useRouter();
   const { data } = useGetAddressesQuery({});
-  const addresses = data?.addresses || [];
+  const addresses = useMemo(() => data?.addresses || [], [data?.addresses]);
   const [selected, setSelected] = useState<string | null>(null);
   const [productDetails, setProductDetails] = useState("");
   const [selectedAddress, setSelectedAddress] = useState("");
@@ -39,8 +39,12 @@ const UseMaintenanceComponents = () => {
     }
   }, [selectedAddress, addresses]);
   const [postMaintenance, { isLoading }] = usePostMaintenanceMutation();
-  const handleFileUpload = (imageData: string) => {
-    setImages([imageData]);
+  const handleFileUpload = (imageData: string | null) => {
+    if (imageData) {
+      setImages([imageData]);
+    } else {
+      setImages([]);
+    }
   };
 
   const base64ToBlob = (base64Str: string) => {
@@ -136,14 +140,14 @@ const UseMaintenanceComponents = () => {
         setUploadKey((prev) => prev + 1);
         notify("تم ارسال الطلب بنجاح", "success");
         router.push("/user/maintenance-requests");
-      } catch (err: any) {
-        console.log(err)
+      } catch (err: unknown) {
+        const errorData = err as { data: { message: string } };
         if (
-          err.data.message === "You do not have permission to access this path."
+          errorData.data?.message === "You do not have permission to access this path."
         ) {
           notify("غير مسموح للادمن ده خاص للعملاء", "error");
         } else if (
-          err.data.message ===
+          errorData.data?.message ===
           "You are not logged in. Please log in to access this page."
         ) {
           notify("يرجى تسجيل الدخول", "error");

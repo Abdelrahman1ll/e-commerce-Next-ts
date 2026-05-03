@@ -6,7 +6,7 @@ import TextComponents from "@/Components/Home/textComponents";
 export default function Home() {
   return (
    <div className="bg-white">
-   <HeaderComponents user={""} setUser={""}/>
+   <HeaderComponents />
    <TextComponents/>
    <MainComponents/>
 

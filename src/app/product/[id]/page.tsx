@@ -5,20 +5,23 @@ import BackButton from "../../../Components/BackButton";
 import ReviewComponent from "../../../Components/Product/ReviewComponent";
 import AllProductinCategoryComponents from "@/Components/Product/AllProductinCategoryComponents";
 interface Props {
-  params: {
-    id: string; // الـ id سيأتي من المسار /product/[id]
-  };
+  params: Promise<{
+    id: string;
+  }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
-const Product = ({ params }: Props) => {
+
+const Product = async ({ params }: Props) => {
+  const { id } = await params;
   return (
     <div className="bg-gray-100">
       <div className="pt-20">
         <BackButton />
       </div>
-      <HeaderComponents user={""} setUser={""} />
+      <HeaderComponents />
       <div className="mt-2">
         <ProductOverviewComponents
-          id={params?.id}
+          id={id}
           _id={""}
           images={[]}
           price={""}
@@ -28,7 +31,7 @@ const Product = ({ params }: Props) => {
           quantity={0}
         />
       </div>
-      <ReviewComponent id={params?.id} />
+      <ReviewComponent id={id} />
 
       <AllProductinCategoryComponents />
 

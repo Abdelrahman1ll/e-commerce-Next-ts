@@ -86,7 +86,7 @@ export default function RootLayout({
           throw new Error("Backend not working");
         }
         return response;
-      } catch (error) {
+      } catch {
         console.warn(`[Mock System] Backend failed for ${url}, fetching from mock data...`);
         return new Response(JSON.stringify(getMockData(url)), {
           status: 200,

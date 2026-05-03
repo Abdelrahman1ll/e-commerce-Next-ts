@@ -3,15 +3,7 @@
 import Link from "next/link";
 import GoogleSigninButton from "../AuthGoogle/GoogleSigninButton";
 import UseSignInComponents from "./SignIn-Components";
-type Props = {
-  name: string;
-  lastName: string;
-  email: string;
-  number: string;
-  password: string;
-  passwordConfirmation: string;
-};
-const SignInComponents: React.FC<Props> = () => {
+const SignInComponents = () => {
   const {
     name,
     setName,

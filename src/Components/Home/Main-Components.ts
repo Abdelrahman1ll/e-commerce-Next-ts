@@ -75,7 +75,7 @@ const UseMainComponents = () => {
 
   useEffect(() => {
     refetch();
-  }, []);
+  }, [refetch]);
 
   
   return {

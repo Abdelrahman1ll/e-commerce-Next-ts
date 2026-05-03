@@ -10,7 +10,7 @@ const LinkAdmon = () => {
       <div className="pt-20">
         <BackButton />
       </div>
-      <HeaderComponents user={""} setUser={""} />
+      <HeaderComponents />
       <AdminLinksOnSmallScreens />
       <div className="mt-50">
         <FooterComponents />

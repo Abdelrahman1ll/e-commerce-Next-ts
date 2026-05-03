@@ -8,7 +8,7 @@ const notFound = () => {
       <div className="pt-20">
         <BackButton />
       </div>
-      <HeaderComponents user={""} setUser={""} />
+      <HeaderComponents />
       <div className="flex flex-col items-center justify-center ">
         <h1 className="text-4xl font-bold">404 Not Found</h1>
         <p className="text-2xl">The page you are looking for does not exist</p>

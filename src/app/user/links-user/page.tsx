@@ -10,7 +10,7 @@ const LinksUser = () => {
       <div className="pt-20 bg-gray-100">
         <BackButton />
       </div>
-      <HeaderComponents user={""} setUser={""} />
+      <HeaderComponents />
       <UserLinksOnSmallScreens />
 
       <div className="mt-80">

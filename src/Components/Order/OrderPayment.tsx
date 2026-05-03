@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { CheckIcon } from "lucide-react";
 import UseCartComponents from "../Cart/Cart-Components";
@@ -12,7 +12,7 @@ interface Address {
 }
 const OrderPayment = () => {
   const router = useRouter();
-  const [paymentMethod, setPaymentMethod] = useState(null);
+  const [paymentMethod, setPaymentMethod] = useState<"visa" | "cash" | null>(null);
   const [selectedAddress, setSelectedAddress] = useState("");
   const [alias, setAlias] = useState("");
   const [details, setDetails] = useState("");
@@ -23,7 +23,7 @@ const OrderPayment = () => {
     paymentMethod: "",
   });
   const { data } = useGetAddressesQuery({});
-  const addresses = data?.addresses || [];
+  const addresses = useMemo(() => data?.addresses || [], [data?.addresses]);
 
   const { products, Id } = UseCartComponents();
   const [postOrder, { isLoading }] = usePostOrderMutation();
@@ -79,9 +79,10 @@ const OrderPayment = () => {
             window.location.href = "/user/order";
       
         } catch (error) {
-          if(error?.data?.message === "Product is out of stock. Available quantity") {
+          const errorData = error as { data: { message: string } };
+          if(errorData?.data?.message === "Product is out of stock. Available quantity") {
             notify("الكمية المطلوبة غير متوفرة", "error");
-          }else if (error?.data?.message === "User not found" || error?.data?.message === "Cannot read properties of null (reading '_id')") {
+          }else if (errorData?.data?.message === "User not found" || errorData?.data?.message === "Cannot read properties of null (reading '_id')") {
             notify("المونتج غير موجود", "error");
           }else {
             notify("خطاء في انشاء الطلب", "error");

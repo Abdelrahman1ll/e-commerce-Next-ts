@@ -34,7 +34,7 @@ const UseCartComponents = () => {
   const handleRemoveAll = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await deleteAllCart().unwrap();
+      await deleteAllCart({}).unwrap();
       window.location.reload();
     } catch  {
       notify("حدث خطا ما", "error");

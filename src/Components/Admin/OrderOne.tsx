@@ -8,15 +8,9 @@ type ProductType = {
   description: string;
   price: number;
   quantity: number;
-  images: string;
+  images: string[];
   averageRating: number;
-  Category: {
-    _id: string;
-    name: string;
-    createdAt: string;
-    updatedAt: string;
-    __v: number;
-  };
+  Category: string;
   brand: string;
   createdAt: string;
   updatedAt: string;
@@ -24,23 +18,6 @@ type ProductType = {
 };
 
 type Props = {
-  _id: string;
-  createdAt: string;
-  status: string;
-  paymentMethod: string;
-  orderNumber: number;
-  user: string;
-  cartItems: string[];
-  isDelivered: boolean;
-  deliveredAt: string;
-  isPaid: boolean;
-  paidAt: string;
-  totalPrice: number;
-  taxPrice: number;
-  shippingPrice: number;
-  discount: number;
-  discountPrice: number;
-  paymentMethodType: string;
   product: {
     product: ProductType;
     count: number;
@@ -101,7 +78,7 @@ const OrderOne = (product: Props) => {
 
         {products?.Category && (
           <div className="text-sm text-gray-500">
-            الفئة: {products?.Category?.name}
+            الفئة: {products?.Category}
           </div>
         )}
       </div>

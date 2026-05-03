@@ -1,4 +1,4 @@
-import { fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { fetchBaseQuery, BaseQueryFn, FetchArgs, FetchBaseQueryError } from "@reduxjs/toolkit/query/react";
 import { URL } from "../Api/baseURL";
 import Cookies from "js-cookie";
 import { getMockData } from "../mockData/index";
@@ -15,7 +15,11 @@ const baseQuery = fetchBaseQuery({
   },
 });
 
-export const customBaseQuery = async (args: any, api: any, extraOptions: any) => {
+export const customBaseQuery: BaseQueryFn<
+  string | FetchArgs,
+  unknown,
+  FetchBaseQueryError
+> = async (args, api, extraOptions) => {
   const method = typeof args === "string" ? "GET" : args.method || "GET";
   const url = typeof args === "string" ? args : args.url;
 

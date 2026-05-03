@@ -1,7 +1,7 @@
 "use client";
 import { useGetAllUsersQuery } from "@/redux/Admin/ApiProduct";
 // import { ChevronRight } from "lucide-react";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 // import Link from "next/link";
 type Props = {
   name: string;
@@ -13,10 +13,9 @@ type Props = {
   updatedAt: string;
 };
 const ClientsComponents = () => {
-  const router = useRouter();
   const { data, isLoading } = useGetAllUsersQuery({});
   const users: Props[] = data?.data?.users || [];
-  const isRTL: boolean = router.locale?.startsWith("ar") || false;
+  const isRTL = true;
 
   const formatDate = (isoString: string) => {
     if (!isoString) return "N/A";

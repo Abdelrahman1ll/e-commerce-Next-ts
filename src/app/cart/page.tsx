@@ -9,7 +9,7 @@ const Cart = () => {
     <div className="mt-20">
       <BackButton />
       </div>
-      <HeaderComponents user={""} setUser={""} />
+      <HeaderComponents />
       <CartComponents />
       <div className="mt-150">
       <FooterComponents />

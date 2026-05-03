@@ -12,6 +12,15 @@ import {
   usePostReviewMutation,
 } from "@/redux/Home/Product/ApiProducts";
 import notify from "../notify";
+interface IReview {
+  _id: string;
+  user: {
+    name: string;
+  };
+  rating: number;
+  review: string;
+}
+
 const ReviewComponent = ({ id }: { id: string }) => {
   const { data: reviews, refetch } = useGetReviewsQuery(id);
   const reviewsData = reviews?.data?.reviews;
@@ -56,13 +65,13 @@ const ReviewComponent = ({ id }: { id: string }) => {
         setReviewMessage("");
         setRating(0);
         refetch();
-      } catch (error) {
-        
-        if (error.data?.message === "لقد قمت بتقييم هذا المنتج من قبل") {
+      } catch (error: unknown) {
+        const apiError = error as { data?: { message?: string } };
+        if (apiError.data?.message === "لقد قمت بتقييم هذا المنتج من قبل") {
           notify("لقد قمت بتقييم هذا المنتج من قبل", "warn");
-        }else if (error.data?.message === "You do not have permission to access this path.") {
+        } else if (apiError.data?.message === "You do not have permission to access this path.") {
           notify("غير مصرح للادمن بالتقييم", "error");
-        }else if(error.data?.message === "You are not logged in. Please log in to access this page."){
+        } else if (apiError.data?.message === "You are not logged in. Please log in to access this page.") {
           notify("يرجى تسجيل الدخول ", "error");
         }
       }
@@ -89,7 +98,6 @@ const ReviewComponent = ({ id }: { id: string }) => {
                     starSpacing="2px"
                     changeRating={changeRating}
                     name="rating"
-                    direction="rtl"
                   />
                   {errors.rating && (
                     <div className="mb-2 text-sm text-red-500">
@@ -146,7 +154,7 @@ const ReviewComponent = ({ id }: { id: string }) => {
     {/* صف يحتوي على اسم العميل مع الدائرة وأيقونات التعديل والحذف */}
 
     {reviewsData &&
-      reviewsData.map((re) => (
+      reviewsData.map((re: IReview) => (
         <ReviewCard
           key={re?._id}
           customerName={re.user?.name}
@@ -166,3 +174,4 @@ const ReviewComponent = ({ id }: { id: string }) => {
 };
 
 export default ReviewComponent;
+
