@@ -4,6 +4,13 @@ import FooterComponents from "../../../Components/Home/FooterComponents";
 import BackButton from "../../../Components/BackButton";
 import ReviewComponent from "../../../Components/Product/ReviewComponent";
 import AllProductinCategoryComponents from "@/Components/Product/AllProductinCategoryComponents";
+import { productsMock } from "../../../mockData/productsMock";
+
+export async function generateStaticParams() {
+  return productsMock.data.products.map((product) => ({
+    id: product._id,
+  }));
+}
 interface Props {
   params: Promise<{
     id: string;

@@ -1,8 +1,7 @@
-// next.config.js
-// module.exports = {
-//   output: 'export',
-//   images: {
-module.exports = {
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  output: 'export',
   images: {
     unoptimized: true,
     remotePatterns: [
@@ -24,3 +23,5 @@ module.exports = {
     ],
   },
 };
+
+export default nextConfig;
