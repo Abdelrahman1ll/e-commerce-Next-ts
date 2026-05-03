@@ -78,24 +78,24 @@ const FooterComponents = () => {
 
         {/* شعارات الدفع */}
         <div className="flex flex-wrap max-[1027px]:mb-4 justify-center  items-center gap-4">
-          <Image src="/fawry-en.svg" alt="Fawry" width={48} height={48} />
+          <Image src="/e-commerce-Next-ts/fawry-en.svg" alt="Fawry" width={48} height={48} />
           <Image
-            src="/master-card.svg"
+            src="/e-commerce-Next-ts/master-card.svg"
             alt="MasterCard"
             width={48}
             height={48}
             className="uniform-class"
           />
           <Image
-            src="/vcash-en.svg"
+            src="/e-commerce-Next-ts/vcash-en.svg"
             alt="Vodafone Cash"
             width={48}
             height={48}
              className="uniform-class"
           />
-          <Image src="/visa-en.svg" alt="Visa" width={48} height={48}  className="uniform-class" />
+          <Image src="/e-commerce-Next-ts/visa-en.svg" alt="Visa" width={48} height={48}  className="uniform-class" />
           {/* إذا أردت إضافة المزيد: */}
-          <Image src="/paypal.svg" alt="PayPal" width={48} height={48}  className="uniform-class" />
+          <Image src="/e-commerce-Next-ts/paypal.svg" alt="PayPal" width={48} height={48}  className="uniform-class" />
         </div>
 
         {/* حقوق الملكية */}
