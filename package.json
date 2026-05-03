@@ -1,7 +1,12 @@
 {
-  "name": "my-app",
+  "name": "e-commerce-next-ts",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://Abdelrahman1ll.github.io/e-commerce-next-ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Abdelrahman1ll/e-commerce-next-ts.git"
+  },
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",

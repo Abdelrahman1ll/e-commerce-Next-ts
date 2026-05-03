@@ -77,7 +77,7 @@ const HeaderComponents: React.FC = () => {
               </Link>
             </div>
             <div className=" md:flex space-x-8 font-bold ">
-              <Link href="/e-commerce-Next-ts">
+              <Link href="/">
                 <div className=" text-gray-700 hover:text-blue-600 cursor-pointer">
                   الرئيسية
                 </div>
@@ -105,7 +105,7 @@ const HeaderComponents: React.FC = () => {
               </div>
 
               {/* الكود الذي يظهر عند مرور الماوس على العنصر */}
-              <Link href="/e-commerce-Next-ts">
+              <Link href="/">
                 <div className="hidden group-hover:block">
                   <span className="flex text-3xl font-bold text-blue-600">
                     H
